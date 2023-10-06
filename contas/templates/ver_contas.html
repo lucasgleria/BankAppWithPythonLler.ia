@@ -1,0 +1,156 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block 'head' %}
+    <link href="{% static 'perfil/css/home.css' %}" rel="stylesheet">
+    <link href="{% static 'perfil/css/gerenciar.css' %}" rel="stylesheet">
+    <style>
+        .linha-conta {
+            background-color: var(--dark-color);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block 'body' %}
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        <div id="success-message" class="alert alert-success" style="display: none;">Conta paga!</div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+                <p class="fonte-destaque" style="border-left: 2px solid red; padding-left: 10px; color: red;">Contas vencidas</p>
+                <div class="card" style="border:solid 2px red;">
+                    {% if not contas_vencidas %}
+                        <p class="fonte-destaque">Ufa, nenhuma conta vencida.</p>
+                    {% else %}
+                        {% for conta in contas_vencidas %}
+                            <div class="linha-conta" style="border-left: 2px solid red; padding-left: 10px;">
+                                <div class="row">
+                                    <div class="col-md text-center">
+                                        {{ conta }}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        Dia: {{ conta.dia_pagamento }}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        <button onclick="pagar({{ contas_pagas.id }})" class="botao-principal" style="background-color: red;">PAGAR</button>
+                                    </div> 
+                                </div>
+                            </div>
+                            <hr class="hr-border">
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <br>
+                <br>
+                <p class="fonte-destaque despesa" style="color: #E96363;">Contas próximas do vencimento</p>
+                <div class="card" style="border: 2px solid var(--differential-color); padding-left: 10px;">
+                    {% if not contas_proximas_vencimento %}
+                        <p class="fonte-destaque">Nenhuma conta próxima do vencimento</p>
+                    {% else %}
+                        {% for conta in contas_proximas_vencimento %}
+                            <div class="linha-conta" style="border-left: 2px solid var(--differential-color); padding-left: 10px;">
+                                <div class="row">
+                                    <div class="col-md text-center">
+                                        {{conta}}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        Dia: {{conta.dia_pagamento}}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        <button onclick="pagar({{ conta.id }})" class="botao-principal" style="background-color: var(--differential-color);">PAGAR</button>
+                                    </div> 
+                                </div>
+                            </div>
+                            <hr class="hr-border">
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <br>
+                <br>
+                <p class="fonte-destaque saldo">Restantes</p>
+                <div class="card" style="border:solid 2px #69D2CD;">
+                    {% if not restantes %}
+                        <p class="fonte-destaque">Nenhuma conta restante</p>
+                    {% else %}
+                        {% for conta in restantes %}
+                            <div class="linha-conta saldo">
+                                <div class="row">
+                                    <div class="col-md text-center">
+                                        {{conta}}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        Dia: {{conta.dia_pagamento}}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        <button onclick="pagar({{ conta.id }})" class="botao-principal">PAGAR</button>
+                                    </div> 
+                                </div>
+                            </div>
+                            <hr class="hr-border">
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <span class="fonte-destaque"><h3 class="saldo">Relatório</h3></span>
+                <div class="card" style="border:solid 2px #69D2CD;">
+                    <span class="fonte-destaque"><h4 style="color:red;">Contas vencidas: {{ contas_vencidas_count }}</h4></span>
+                    <hr class="hr-border">
+                    <span class="fonte-destaque"><h4 class="negativo">Próximas do Vencimento: {{ contas_proximas_vencimento_count }}</h4></span>
+                    <hr class="hr-border">
+                    <span class="fonte-destaque"><h4>Restantes: {{ restantes_count }}</h4></span>
+                    <hr class="hr-border">
+                    <span class="fonte-destaque"><h4 class="positivo">Pagas: {{ contas_pagas_count }}</h4></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function pagar(id) {
+            valor = document.getElementById('valor-contas_pagas'+id).value
+
+            fetch("/ver_contas/pagar/"+id, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({paga: valor})
+            })
+            .then((result) => {
+                    return result.json()
+            
+            }).then((data) => {
+                console.log(data)
+                const successMessage = document.getElementById('success-message')
+                successMessage.style.display = 'block'
+                location.reload(); // Recarrega a página após a conclusão do pagamento
+            })
+            .catch((err) => {
+                console.log('Erro: ' + err);
+            });
+        }
+
+        function verificarArquivo(input) {
+            if (input.files && input.files[0]) {
+              var icone = input.files[0];
+              if (icone.size > 0) {
+                input.style.backgroundColor = "#69D2CD"; // arquivo selecionado, cor azul
+              } else {
+                input.style.backgroundColor = "#E96363"; // arquivo vazio, cor vermelha
+              }
+            } else {
+              input.style.backgroundColor = ""; // nenhum arquivo selecionado, cor padrão
+            }
+          }
+    </script>
+    
+{% endblock %}

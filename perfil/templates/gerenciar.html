@@ -1,0 +1,171 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block 'head' %}
+
+    <link href="{% static 'perfil/css/home.css' %}" rel="stylesheet">
+    <link href="{% static 'perfil/css/gerenciar.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block 'body' %}
+    <br>
+    <br>
+    <div class="container">
+        <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            
+            
+            <div class="col-md-5">
+                <span class="fonte-destaque saldo">Suas contas</span>
+                <br>
+                <br>
+             <div class="card" style="border:solid 2px #69D2CD;">
+                
+                <div class="contas">
+                    {% if contas %}
+                        {% for conta in contas %}
+                            <div class="lista-contas-main">
+                                <span><img width="10%" src="{{conta.icone.url}}">&nbsp&nbsp{{conta.apelido}}</span>
+                                <span class="total-conta positivo ">R$ {{conta.valor}}&nbsp&nbsp&nbsp <a href="/perfil/deletar_banco/{{conta.id}}"><img src="{% static 'perfil/img/exit.png' %}"></a></span>
+                            </div>
+                            <br>
+                        {% endfor %}
+                    {% else %}
+                        <p class="despesa">Nenhuma conta encontrada</p>
+                    {% endif %}
+                </div>
+                
+
+                <hr class="hr-borda">
+                <span class="fonte-destaque saldo">Total:</span>
+                <span class="positivo total-conta font-destaque">R$ {{total_contas}}</span>
+            </div>
+            </div>
+        
+            <div class="col-md-1"></div>
+            
+            <div class="col-md-6">
+                <span class="fonte-destaque saldo">Nova conta</span>
+                <br>
+                <br>
+                <div class="card" style="border:solid 2px #69D2CD;">
+                <form action="{% url 'cadastrar_banco' %}" method="POST" enctype="multipart/form-data"> 
+                    {% csrf_token %}
+                    
+                    <label>Apelido</label>
+                    <input type="text" name="apelido" class="form-control" placeholder="Nome da conta aqui">
+                    <br>
+                    
+                    <label>Banco</label>
+                    <select name="banco" class="form-select">
+                        {% for banco_choice in bancos %}
+                            <option value="{{ banco_choice.0 }}">{{ banco_choice.1 }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    
+                    <label>Tipo</label>
+                    <select name="tipo" class="form-select">
+                        {% for tipo_choice in tipos %}
+                            <option value="{{ tipo_choice.0 }}">{{ tipo_choice.1 }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    
+                    <label>Valor</label>
+                    <input type="float" name="valor" class="form-control" placeholder="R$">
+                    <br>
+                    
+                    <label>Imagem</label>
+                        <div class="form control">
+                            <input type="file" placeholder="Ícone" name="icone" class="form-control" id="icone-input" onchange="verificarArquivo(this)" required>
+                            <button type="button" class="btn btn-secondary" onclick="limparArquivo()">Limpar</button>
+                        </div>
+                    <br>
+                    <br>
+                    <input style="width: 100%" type="submit" class="botao-principal" name="Enviar">
+                </form>
+            </div>
+        </div>
+        </div>
+
+        <br>
+        <hr>
+        <br>
+
+        <div class="row">
+            <div class="col-md-5">
+                <span class="fonte-destaque saldo">Nova categoria</span>
+                <br>
+                <br>
+                <div class="card" style="border:solid 2px #69D2CD;">
+
+                
+                <form action=" {% url 'cadastrar_categoria' %} " method="POST"> {% csrf_token%}
+                    <label>Categoria</label>
+                    <input type="text" name="categoria" class="form-control" placeholder="Nome da categoria aqui">                   
+                    <br>
+                    <input type="checkbox" name="essencial" value="essencial"><label class="positivo">&nbspEssencial</label>
+                    <br>
+                    <br>
+                   
+                    <input style="width: 100%" type="submit" class="botao-principal" value="Adicionar">
+                </form>
+             </div>
+            </div>
+
+            <div class="col-md-1"></div>
+
+            <div class="col-md-6">
+                <div class="d-flex justify-content-between">
+                    <span class="fonte-destaque saldo">Suas categorias</span>
+                    <span class="fonte-destaque saldo">Essencial</span>
+                </div>
+                <br>
+                <div class="card" style="border:solid 2px #69D2CD;">
+                    
+                   
+                    <div class="contas">
+                        {% for categoria in categorias %}
+                            <div class="lista-contas-main">
+                                <span>{{ categoria }}</span>
+                                <span class="total-conta">
+                                    <a href="{% url 'update_categoria' categoria.id %}">
+                                        <img  src="{% if categoria.essencial %}{% static 'perfil/img/check.png' %}{% else %}{% static 'perfil/img/exit.png' %}{% endif %}">
+                                    </a>
+                                </span>
+                            </div>
+                            <br>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <script>
+        function verificarArquivo(input) {
+          if (input.files && input.files[0]) {
+            var icone = input.files[0];
+            if (icone.size > 0) {
+              input.style.backgroundColor = "#69D2CD"; // arquivo selecionado, cor azul
+            } else {
+              input.style.backgroundColor = "#E96363"; // arquivo vazio, cor vermelha
+            }
+          } else {
+            input.style.backgroundColor = ""; // nenhum arquivo selecionado, cor padrão
+          }
+        }
+
+        function limparArquivo() {
+            var iconeInput = document.getElementById('icone-input');
+            iconeInput.value = ""; // Limpa o valor do campo de entrada de arquivo
+            iconeInput.style.backgroundColor = ""; // Remove a cor de fundo
+          }
+
+        </script>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block 'head' %}
+
+    <link href="{% static 'perfil/css/home.css' %}" rel="stylesheet">
+    <link href="{% static 'perfil/css/gerenciar.css' %}" rel="stylesheet">
+    <link href="{% static 'extrato/css/view_extrato.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block 'body' %}
+
+    <div class="container">
+        <br>
+        <br>
+        <p class="fonte-destaque saldo">Meu planejamento</p>
+        
+        <div class="card" style="border:solid 2px #69D2CD;">
+            
+            <div class="col-md">
+                <div class="card" style="border:solid 0px">
+                  <span class="fonte-destaque saldo">Total:</span>
+                  
+                  <div>
+                    <span style="float: left !important;">R$ {{categoria.total_gasto}}</span>
+                    <span style="float: right !important;">R$ {{categoria.valor_planejamento}}</span>
+                </div>
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-striped {% if categoria.calcula_percentual_gasto_por_categoria >= 100 %}bg-danger{% else %}bg-info{% endif %}" role="progressbar" style="width: {{categoria.calcula_percentual_gasto_por_categoria}}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+             {% comment %} Tornar dinamico {% endcomment %}
+                </div>
+                <hr>
+            </div>
+            
+            <div class="col-md">
+                <div class="card" style="border:solid 0px">
+                    {% for categoria in categorias %}
+                    <h5 class="saldo">{{categoria}}</h5>
+                    <div>
+                        <span style="float: left !important;">R$ {{categoria.total_gasto}}</span>
+                        <span style="float: right !important;">R$ {{categoria.valor_planejamento}}</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped 
+                            {% if categoria.calcula_percentual_gasto_por_categoria >= 100 %}bg-danger{% else %}bg-info{% endif %}" role="progressbar" style="width: {{categoria.calcula_percentual_gasto_por_categoria}}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                
+                    <hr>
+              
+                    {% endfor %}
+                </div>
+                    <div class="col-md">
+                        <a href="{% url 'definir_planejamento' %}" class="botao-secundario">Redefinir planejamento</a>
+                    </div>  
+                
+                
+                          
+            </div>
+            
+        </div>
+     
+
+            </div>
+            <div class="col-md-2 text-center">
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

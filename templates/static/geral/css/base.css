@@ -1,0 +1,82 @@
+body{
+    background-color: #1C1A1A !important;
+    color: white !important;
+}
+
+:root{
+
+    --main-color: #2B2B2B;
+    --dark-color: #1C1A1A;
+    --contrast-color: #69D2CD;
+    --other-color: #FF000C;
+    --differential-color: #E96363;
+
+}
+
+.botao-principal{
+
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 18px;
+
+    padding: 10px;
+    background-color: var(--contrast-color);
+    text-align: center;
+    border-radius: 15px;
+
+    width: 100%;
+    display: block;    
+
+}
+
+.botao-principal:hover{
+
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    
+    padding: 10px;
+    background-color: transparent;
+    text-align: center;
+    border-radius: 15px;
+    border: 2px solid var(--contrast-color);
+    
+    width: 100%;
+    display: block;
+
+}
+
+.botao-secundario{
+
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    
+    padding: 10px;
+    background-color: transparent;
+    text-align: center;
+    border-radius: 15px;
+    border: 2px solid var(--contrast-color);
+    
+    width: 100%;
+    display: block;
+
+}
+
+.botao-secundario:hover{
+
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 18px;
+
+    padding: 10px;
+    background-color: var(--contrast-color);
+    text-align: center;
+    border-radius: 15px;
+
+    width: 100%;
+    display: block;
+
+}
