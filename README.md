@@ -9,7 +9,7 @@ Esse portfólio serve como uma maneira eficaz de exibir meu trabalho e destacar-
 
 Neste repositório está o projeto BankApp ller.ia, desenvolvido por mim.
 
-A palheta de cores e o template inicial do projeto foi disponibilizado por [Caio Sampaio](pythonando.com.br/).
+A palheta de cores e o template inicial do projeto foi disponibilizado por [Caio Sampaio](pythonando.com.br/).  
 
 * Público Alvo: _A Quem Interessar_
 * Tema do Site: Aplicação em formato de **site de Banco Digital**
@@ -82,3 +82,13 @@ A palheta de cores e o template inicial do projeto foi disponibilizado por [Caio
 ## | Equipe
 
 * [Lucas Gomes Leria](https://www.linkedin.com/in/lucasleria/) - Desenvolvedor UX e Programador Fullstack
+
+
+## | Observações
+
+Esse projeto **NÃO** está concluído, caso queira rodar em seu localhost, esteja ciente que enferentará problemas.
+
+Não esqueça de fazer o ambiente virtual python (venv)
+
+Caso, esteja utilizando windows, execute na sequências, os seguintes comandos
+![](code.png)
